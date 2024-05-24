@@ -31,11 +31,8 @@ export const logout = async (): Promise<void> => {
 export const checkToken = async (): Promise<boolean> => {
   try {
     const token = localStorage.getItem('access_token');
-    console.log("ffffff2", token);
     if (!token) throw new Error('No token found');
-    console.log("ffffff3");
     const response = await apiClient.get('/check-token');
-    console.log("ffffff",response);
     return response.status === 200;
   } catch (error) {
     return false;

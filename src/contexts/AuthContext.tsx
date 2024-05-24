@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [sss, setSss] = useState<boolean>(true);
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -26,9 +27,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const userRole = localStorage.getItem("user_role");
         setRole(userRole);
       }
+
+      // setSss(false);
       setTimeout(() => {
-        setLoading(false);
-      }, 1000);
+        setSss(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 200);
+      }, 500);
     };
 
     verifyToken();
@@ -39,23 +45,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       value={{ isAuthenticated, role, setIsAuthenticated, setRole }}
     >
       <div className="flex justify-center items-center h-screen">
-        {loading ? (
-          <div
-            className={`transition-opacity duration-1000 ${
-              loading ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <Loading />
-          </div>
-        ) : (
-          <div
-            className={`transition-opacity duration-1000 ${
-              !loading ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            {children}
-          </div>
-        )}
+        <div
+          className={`transition-opacity duration-200 ${
+            sss ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          {loading ? <Loading /> : null}
+        </div>
+        <div
+          className={`transition-opacity duration-500 ${
+            !loading ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          {!loading ? children : null}
+        </div>
       </div>
     </AuthContext.Provider>
   );
