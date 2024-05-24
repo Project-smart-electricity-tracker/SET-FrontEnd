@@ -1,7 +1,6 @@
 import React from "react";
 import {
   createBrowserRouter,
-  RouterProvider,
   RouteObject,
 } from "react-router-dom";
 import Login from "./components/Auth/Login";

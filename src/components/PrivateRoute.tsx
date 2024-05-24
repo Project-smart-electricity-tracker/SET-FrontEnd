@@ -9,14 +9,17 @@ interface PrivateRouteProps {
 
 const PrivateRoute = ({ children, requiredRole }: PrivateRouteProps) => {
   const auth = useContext(AuthContext);
-  console.log('ssssssssssss',auth);
   const location = useLocation();
 
-  if (!auth?.isAuthenticated) {
+  if (auth === undefined) {
+    return <div>Loading...</div>;
+  }
+
+  if (!auth.isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} />;
   }
 
-  if (requiredRole && auth?.role && requiredRole.includes(auth?.role) ) {
+  if (requiredRole && !requiredRole.includes(auth.role as string)) {
     return <Navigate to="/unauthorized" />;
   }
 
