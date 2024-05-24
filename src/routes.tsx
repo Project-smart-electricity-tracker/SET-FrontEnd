@@ -1,21 +1,21 @@
 import React from "react";
-import {
-  createBrowserRouter,
-  RouteObject,
-} from "react-router-dom";
+import { createBrowserRouter, RouteObject } from "react-router-dom";
 import Login from "./components/Auth/Login";
 import Logout from "./components/Auth/Logout";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Home from "./pages/Home/Home";
 import Unauthorized from "./pages/Unauthorized/Unauthorized";
 import PrivateRoute from "./components/PrivateRoute";
+import Layout from "./components/Layout/Layout";
 
 const routes: RouteObject[] = [
   {
     path: "/",
     element: (
       <PrivateRoute requiredRole={["USER", "ADMIN"]}>
-        <Home />
+        <Layout>
+          <Home />
+        </Layout>
       </PrivateRoute>
     ),
   },
@@ -31,7 +31,9 @@ const routes: RouteObject[] = [
     path: "/dashboard",
     element: (
       <PrivateRoute requiredRole={["ADMIN"]}>
-        <Dashboard />
+        <Layout>
+          <Dashboard />
+        </Layout>
       </PrivateRoute>
     ),
   },

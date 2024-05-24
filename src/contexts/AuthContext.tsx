@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     <AuthContext.Provider
       value={{ isAuthenticated, role, setIsAuthenticated, setRole }}
     >
-      <div className="flex justify-center items-center h-screen">
+      <div className="">
         <div
           className={`transition-opacity duration-200 ${
             sss ? "opacity-100" : "opacity-0"

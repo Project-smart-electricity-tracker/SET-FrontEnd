@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { DecodeTokenAndSetLocalStorage } from '../helpers/DecodeJWT';
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
@@ -34,15 +35,18 @@ apiClient.interceptors.response.use(
         const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/refresh-token`, {
           refresh_token: refreshToken,
         });
-        const { access_token } = response.data;
+        DecodeTokenAndSetLocalStorage(response.data.data);
 
-        localStorage.setItem('access_token', access_token);
-
-        originalRequest.headers.Authorization = `Bearer ${access_token}`;
+        originalRequest.headers.Authorization = `Bearer ${response.data.data.access_token}`;
         return apiClient(originalRequest);
       } catch (refreshError) {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
+        localStorage.removeItem('user_role');
+        localStorage.removeItem('user_username');
+        localStorage.removeItem('user_name');
+        localStorage.removeItem('user_exp');
+        
         window.location.href = '/login';
         return Promise.reject(refreshError);
       }

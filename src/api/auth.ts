@@ -1,22 +1,10 @@
 import apiClient from './axios';
 import { Response } from '../models/response';
-import {jwtDecode} from 'jwt-decode';
-import { DecodeToken } from '../models/decode_token';
-
-// interface LoginResponse {
-//   access_token: string;
-//   refresh_token: string;
-// }
+import { DecodeTokenAndSetLocalStorage } from '../helpers/DecodeJWT';
 
 export const login = async (username: string, password: string): Promise<Response> => {
   const response = await apiClient.post<Response>('/login', { username, password });
-  localStorage.setItem('access_token', response.data.data.access_token);
-  localStorage.setItem('refresh_token', response.data.data.refresh_token);
-  const decoded: DecodeToken = jwtDecode(response.data.data.access_token);
-  localStorage.setItem('user_role', decoded.role);
-  localStorage.setItem('user_username', decoded.username);
-  localStorage.setItem('user_name', decoded.name);
-  localStorage.setItem('user_exp', decoded.exp.toString());
+  DecodeTokenAndSetLocalStorage(response.data.data);
   return response.data;
 };
 
@@ -26,6 +14,9 @@ export const logout = async (): Promise<void> => {
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
   localStorage.removeItem('user_role');
+  localStorage.removeItem('user_username');
+  localStorage.removeItem('user_name');
+  localStorage.removeItem('user_exp');
 };
 
 export const checkToken = async (): Promise<boolean> => {
